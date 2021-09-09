@@ -21,6 +21,15 @@ const setQuery = (sql, res) => {
    })
 }
 
+//Get data form body
+const getKasirFromBody = req => {
+   const nama_item = req.body.nama_item;
+   const jenis_transaksi = req.body.jenis_transaksi;
+   const nominal_transaksi = req.body.nama_item;
+   
+   return { nama_item, jenis_transaksi, nominal_transaksi }   
+}
+
 //INDEX
 module.exports.index = (req, res) => {
    response.success('API Sukses berjalan dengan baik', res)
@@ -57,11 +66,7 @@ module.exports.kasirByTransaction = (req, res) => {
 //Insert new record into POS_KASIR
 module.exports.kasirNewRecord = (req, res) => {
    const tanggal_transaksi = new Date().getTime();
-   const nama_item = req.body.nama_item;
-   const jenis_transaksi = req.body.jenis_transaksi;
-   const nominal_transaksi = req.body.nama_item;
-   
-   console.log(req.body)
+   const { nama_item, jenis_transaksi, nominal_transaksi } = getKasirFromBody(req);
    
    const sql = `INSERT INTO POS_KASIR (tanggal_transaksi, nama_item, jenis_transaksi, nominal_transaksi) 
       VALUES('${tanggal_transaksi}', '${nama_item}', '${jenis_transaksi}', '${nominal_transaksi}')`;
@@ -74,4 +79,9 @@ module.exports.kasirDelete = (req, res) => {
    const id = req.params.id;
    const sql = `DELETE FROM POS_KASIR WHERE id_transaksi = ${id}`;
    setQuery(sql, res);
+}
+
+//Update record by id_transaksi
+module.exports.kasirUpdate = (req, res) => {
+   
 }
