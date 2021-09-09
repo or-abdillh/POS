@@ -48,6 +48,13 @@ module.exports.kasirById = (req, res) => {
    setQuery(sql, res);
 }
 
+//Order by nama_item
+module.exports.kasirByName = (req, res) => {
+   const keyword = req.params.keyword;
+   const sql = `SELECT * FROM POS_KASIR WHERE nama_item LIKE '%${keyword}%'`;
+   setQuery(sql, res);
+}
+
 //Order by range of date
 module.exports.kasirByRangeDate = (req, res) => {
    const from = req.params.from;
