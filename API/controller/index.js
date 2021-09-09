@@ -67,7 +67,6 @@ module.exports.kasirByTransaction = (req, res) => {
 module.exports.kasirNewRecord = (req, res) => {
    const tanggal_transaksi = new Date().getTime();
    const { nama_item, jenis_transaksi, nominal_transaksi } = getKasirFromBody(req);
-   
    const sql = `INSERT INTO POS_KASIR (tanggal_transaksi, nama_item, jenis_transaksi, nominal_transaksi) 
       VALUES('${tanggal_transaksi}', '${nama_item}', '${jenis_transaksi}', '${nominal_transaksi}')`;
       
@@ -83,5 +82,10 @@ module.exports.kasirDelete = (req, res) => {
 
 //Update record by id_transaksi
 module.exports.kasirUpdate = (req, res) => {
-   
+   const id = req.body.id_transaksi;
+   const { nama_item, jenis_transaksi, nominal_transaksi } = getKasirFromBody(req);
+   const sql = `UPDATE POS_KASIR SET nama_item = '${nama_item}', jenis_transaksi = '${jenis_transaksi}', nominal_transaksi = '${nominal_transaksi}' 
+      WHERE id_transaksi = ${id}`;
+      
+   setQuery(sql, res);
 }
