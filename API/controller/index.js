@@ -143,3 +143,12 @@ module.exports.barangDelete = (req, res) => {
    const sql = `DELETE FROM POS_BARANG WHERE id_barang = ${id}`;
    setQuery(sql, res);
 }
+
+//Update record by id_barang
+module.exports.barangUpdate = (req, res) => {
+   const id = req.body.id_barang;
+   const { nama_barang, harga_barang, stok_barang, satuan_harga_barang } = getBarangFromBody(req);
+   const sql =`UPDATE POS_BARANG SET nama_barang = '${nama_barang}', harga_barang = ${harga_barang}, stok_barang = ${stok_barang}, satuan_harga_barang = '${satuan_harga_barang}' 
+      WHERE id_barang = ${id}`;
+   setQuery(sql, res);
+}
