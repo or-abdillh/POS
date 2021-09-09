@@ -14,10 +14,17 @@ const setResponse = (data, res) => {
    res.end();
 }
 
+//Response success
 module.exports.success = (values, res) => {
   setResponse(setData(200, 'success' ,values), res);
 }
 
-module.exports.noContent = (res) => {
+//Response no content
+module.exports.noContent = res => {
    setResponse(setData(204, 'no content', []), res);
 }
+
+//Response internal server error
+module.exports.internalError = res => {
+   setResponse(setData(500, 'internal server error', []), res);
+} 

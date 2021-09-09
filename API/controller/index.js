@@ -6,7 +6,10 @@ var connection = require('../connection/');
 //connection.query
 const setQuery = (sql, res) => {
    connection.query(sql, (err, rows, fields) => {
-      if (err) throw(err);
+      if (err) {
+         response.internalError(res);
+         throw(err);
+      }   
       else {
          // If reponse is empty list
          if (rows.length == 0) {
