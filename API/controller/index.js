@@ -29,6 +29,15 @@ const getKasirFromBody = req => {
    
    return { nama_item, jenis_transaksi, nominal_transaksi }   
 }
+//Get data barang from request body
+const getBarangFromBody = req => {
+   const nama_barang = req.body.nama_barang;
+   const harga_barang = req.body.harga_barang;
+   const stok_barang = req.body.stok_barang;
+   
+   return { nama_barang, harga_barang, stok_barang }
+}
+
 
 //INDEX
 module.exports.index = (req, res) => {
@@ -104,9 +113,25 @@ module.exports.barangAll = (req, res) => {
    setQuery(sql, res);
 }
 
-//Order by id_transaksi
+//Order by id_barang
 module.exports.barangById = (req, res) => {
    const id = req.params.id;
    const sql = `SELECT * FROM POS_BARANG WHERE id_barang = ${id}`;
    setQuery(sql, res);
+}
+
+//Order by nama_barang
+module.exports.barangByName = (req, res) => {
+   const keyword = req.params.keyword;
+   const sql = `SELECT * FROM POS_BARANG WHERE nama_barang LIKE '%${keyword}%'`;
+   setQuery(sql, res);
+}
+
+//Insert new record
+module.exports.barangNewRecord = (req, res) => {
+   const { nama_barang, harga_barang, stok_barang } = getBarangFromBody(req);
+   const sql = `INSERT INTO POS_BARANG (nama_barang, harga_barang, stok_barang) 
+      VALUES('${nama_barang}', ${harga_barang}, ${stok_barang})`;
+   
+   setQuery(sql, res);   
 }
