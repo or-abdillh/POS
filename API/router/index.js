@@ -13,10 +13,14 @@ module.exports = (app) => {
    .get(controller.kasirAll);
   
   //Order by id_transaksi   
-  app.route('/kasir/all/:id')
+  app.route('/kasir/all/id/:id')
    .get(controller.kasirById);
    
   //Order by range of date
-  app.route('/kasir/all/:from/:to')
+  app.route('/kasir/all/date/:from/:to')
    .get(controller.kasirByRangeDate);
+   
+  //Order by jenis_transaksi
+  app.route('/kasir/all/transaction/:transaction')
+   .get(controller.kasirByTransaction)
 }
