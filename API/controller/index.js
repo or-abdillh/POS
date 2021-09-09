@@ -7,7 +7,7 @@ var connection = require('../connection/');
 const setQuery = (sql, res) => {
    connection.query(sql, (err, rows, fields) => {
       if (err) {
-         response.internalError(res);
+         response.internalError(err, res);
          throw(err);
       }   
       else {
@@ -52,4 +52,19 @@ module.exports.kasirByTransaction = (req, res) => {
    const transaction = req.params.transaction;
    const sql = `SELECT * FROM POS_KASIR WHERE jenis_transaksi = '${transaction}'`;
    setQuery(sql, res);
+}
+
+//Insert new record into POS_KASIR
+module.exports.kasirNewRecord = (req, res) => {
+   const tanggal_transaksi = new Date().getTime();
+   const nama_item = req.body.nama_item;
+   const jenis_transaksi = req.body.jenis_transaksi;
+   const nominal_transaksi = req.body.nama_item;
+   
+   console.log(req.body)
+   
+   const sql = `INSERT INTO POS_KASIR (tanggal_transaksi, nama_item, jenis_transaksi, nominal_transaksi) 
+      VALUES('${tanggal_transaksi}', '${nama_item}', '${jenis_transaksi}', '${nominal_transaksi}')`;
+      
+   setQuery(sql, res);   
 }

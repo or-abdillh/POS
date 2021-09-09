@@ -25,6 +25,6 @@ module.exports.noContent = res => {
 }
 
 //Response internal server error
-module.exports.internalError = res => {
-   setResponse(setData(500, 'internal server error', []), res);
+module.exports.internalError = (err, res) => {
+   setResponse(setData(500, 'internal server error', err), res);
 } 

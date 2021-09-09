@@ -22,5 +22,9 @@ module.exports = (app) => {
    
   //Order by jenis_transaksi
   app.route('/kasir/all/transaction/:transaction')
-   .get(controller.kasirByTransaction)
+   .get(controller.kasirByTransaction);
+   
+  //Insert new record
+  app.route('/kasir/new/')
+   .post(controller.kasirNewRecord);
 }
