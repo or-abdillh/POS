@@ -27,4 +27,8 @@ module.exports = (app) => {
   //Insert new record
   app.route('/kasir/new/')
    .post(controller.kasirNewRecord);
+   
+  //Delete record by id_transaksi
+  app.route('/kasir/del/id/:id')
+   .get(controller.kasirDelete);
 }

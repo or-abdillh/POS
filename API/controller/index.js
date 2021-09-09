@@ -68,3 +68,10 @@ module.exports.kasirNewRecord = (req, res) => {
       
    setQuery(sql, res);   
 }
+
+//Delete record by id_transaksi
+module.exports.kasirDelete = (req, res) => {
+   const id = req.params.id;
+   const sql = `DELETE FROM POS_KASIR WHERE id_transaksi = ${id}`;
+   setQuery(sql, res);
+}
