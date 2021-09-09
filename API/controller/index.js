@@ -21,7 +21,7 @@ const setQuery = (sql, res) => {
    })
 }
 
-//Get data form body
+//Get data transaksi from request body
 const getKasirFromBody = req => {
    const nama_item = req.body.nama_item;
    const jenis_transaksi = req.body.jenis_transaksi;
@@ -94,5 +94,19 @@ module.exports.kasirUpdate = (req, res) => {
    const sql = `UPDATE POS_KASIR SET nama_item = '${nama_item}', jenis_transaksi = '${jenis_transaksi}', nominal_transaksi = '${nominal_transaksi}' 
       WHERE id_transaksi = ${id}`;
       
+   setQuery(sql, res);
+}
+//END OF CONTROLLER FOR POS_KASIR
+
+//CONTROLLER FOR POS_BARANG
+module.exports.barangAll = (req, res) => {
+   const sql = 'SELECT * FROM POS_BARANG';
+   setQuery(sql, res);
+}
+
+//Order by id_transaksi
+module.exports.barangById = (req, res) => {
+   const id = req.params.id;
+   const sql = `SELECT * FROM POS_BARANG WHERE id_barang = ${id}`;
    setQuery(sql, res);
 }
