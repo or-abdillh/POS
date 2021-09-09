@@ -34,8 +34,9 @@ const getBarangFromBody = req => {
    const nama_barang = req.body.nama_barang;
    const harga_barang = req.body.harga_barang;
    const stok_barang = req.body.stok_barang;
+   const satuan_harga_barang = req.body.satuan_harga_barang;
    
-   return { nama_barang, harga_barang, stok_barang }
+   return { nama_barang, harga_barang, stok_barang, satuan_harga_barang }
 }
 
 
@@ -129,9 +130,16 @@ module.exports.barangByName = (req, res) => {
 
 //Insert new record
 module.exports.barangNewRecord = (req, res) => {
-   const { nama_barang, harga_barang, stok_barang } = getBarangFromBody(req);
-   const sql = `INSERT INTO POS_BARANG (nama_barang, harga_barang, stok_barang) 
-      VALUES('${nama_barang}', ${harga_barang}, ${stok_barang})`;
+   const { nama_barang, harga_barang, stok_barang, satuan_harga_barang } = getBarangFromBody(req);
+   const sql = `INSERT INTO POS_BARANG (nama_barang, harga_barang, stok_barang, satuan_harga_barang) 
+      VALUES('${nama_barang}', ${harga_barang}, ${stok_barang}, '${satuan_harga_barang}')`;
    
    setQuery(sql, res);   
+}
+
+//Delete record by id_barang
+module.exports.barangDelete = (req, res) => {
+   const id = req.params.id;
+   const sql = `DELETE FROM POS_BARANG WHERE id_barang = ${id}`;
+   setQuery(sql, res);
 }

@@ -57,4 +57,8 @@ module.exports = (app) => {
    //Insert new record   
    app.route('/barang/new/')
       .post(controller.barangNewRecord);
+      
+   //Delete record by id_barang
+   app.route('/barang/delete/id/:id')
+      .get(controller.barangDelete);
 }
