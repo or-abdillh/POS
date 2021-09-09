@@ -7,7 +7,14 @@ var connection = require('../connection/');
 const setQuery = (sql, res) => {
    connection.query(sql, (err, rows, fields) => {
       if (err) throw(err);
-      else response.success(rows, res);
+      else {
+         // If reponse is empty list
+         if (rows.length == 0) {
+            response.noContent(res);
+         } else {
+            response.success(rows, res);
+         }
+      }
    })
 }
 
