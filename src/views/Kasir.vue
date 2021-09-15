@@ -1,59 +1,42 @@
 <template>
-   <div class="bg-gray-100 text-center overflow-scroll px-3 py-3">
-      <h1 class="text-gray-600 text-2xl" >Kasir</h1>
-      <small>Selamat datang di Ojons Mart cabang Orlando</small>
-      <div class="border p-3 text-left mt-3">
-         <h1>Riwayat transaksi : </h1>
-         <button @click="getData" class="bg-green-500 px-3 py-2 mt-2 rounded text-white :active-bg-green-300" type="button">Refresh</button>
-         
-         <table class="table-auto mt-3">
-            <thead class="bg-blue-300 text-gray-800" >
-               <tr class="text-sm" >
-                  <th class="py-1 px-3">ID</th>
-                  <th class="py-1 px-3">Item</th>
-                  <th class="py-1 px-3">Nominal</th>
-                  <th class="py-1 px-3">Tanggal transaksi</th>
-                  <th class="py-1 px-3">Jenis</th>
-               </tr>
-            </thead>
-            <tbody class="bg-blue-200">
-               <template v-for="item in data.results" :key='item.id_transaksi'>
-                  <tr class="text-center" >
-                     <td >{{ item.id_transaksi }}</td>
-                     <td>{{ item.nama_item }}</td>
-                     <td>{{ item.nominal_transaksi }}</td>
-                     <td>{{ new Date(item.tanggal_transaksi).toLocaleString('id') }}</td>
-                     <td>{{ item.jenis_transaksi }}</td>
-                  </tr>
-               </template>
-            </tbody>
-         </table>
-      </div>
-   </div>
+   <section class="container md:mx-auto py-4 px-3 md:px-5">
+      <h1 class="text-center text-xl font-semibold" >Aplikasi Kasir</h1>
+      <p class="text-center text-gray-500" >Selamat Datang di Ojon Mart Cabang Ohio</p>
+      <ul class="mt-3 flex md:justify-center justify-evenly font-semibold">
+         <template v-for="menu in menus" :key="menu.name">
+            <li :class="menuActive === menu.name ? 'active' : ''" 
+               @click="menuActive = menu.name, currentTab = menu.component" class="menu md:mr-4" >{{ menu.name }}</li>
+         </template>
+      </ul>
+      <component :is="currentTab" ></component>
+   </section>
 </template>
 
-<script>
+<script setup >
    
-   import axios from 'axios'
    import { ref } from 'vue'
+   import Home from '../components/Home.vue'
+   import Inventory from '../components/Inventory.vue'
+   import Manage from '../components/Manage.vue'
    
-   export default {
-      name: 'Kasir',
-      setup() {
-         
-         const data = ref('')
-         
-         const getData = () => {
-            axios.get('http://localhost:8080/kasir/all')
-               .then( response => {
-                  data.value= response.data
-               })
-         }
-         
-         return { data, getData }
-      }
-   }
    
+   const menus = ref([
+         {name: 'Home', component: Home},
+         {name: 'Inventory', component: Inventory},
+         {name: 'Manage', component: Manage}
+      ])
+      
+   const menuActive = ref('Home')   
+   const currentTab = ref(Home)
 </script>
 
-Thu Sep 09 2021 10:24:19 GMT+0800 (Waktu Indonesia Tengah)
+<style>
+   
+   .menu {
+      @apply duration-300 bg-gray-200 text-gray-700 px-4 py-2 rounded;
+   }
+   .active {
+      @apply bg-green-500 text-gray-100;
+   }
+   
+</style>
