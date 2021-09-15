@@ -25,7 +25,7 @@ const setQuery = (sql, res) => {
 const getKasirFromBody = req => {
    const nama_item = req.body.nama_item;
    const jenis_transaksi = req.body.jenis_transaksi;
-   const nominal_transaksi = req.body.nama_item;
+   const nominal_transaksi = req.body.nominal_transaksi;
    
    return { nama_item, jenis_transaksi, nominal_transaksi }   
 }
