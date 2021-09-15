@@ -1,23 +1,26 @@
 <template>
+   <pre>
+      {{ form }}
+   </pre>
    <div class="mt-5 mb-5 mx-auto w-10/12">
       <h1>1. Create new transactions</h1>
       <div class="mt-3">
-         <input class="input" type="text" placeholder="Nama item"/>
-         <select class="input text-gray-500 focus:text-gray-700">
-            <option>--Select</option>
-             <option value="Pemasukan">Pemasukan</option>
-             <option value="Pengeluaran">Pengeluaran</option>
+         <input :class="form.nama_item === '' ? 'border-red-600' : ''" v-model="form.nama_item" class="input" type="text" placeholder="Nama item"/>
+         <select :class="form.jenis_transaksi === '' ? 'border-red-600' : ''" v-model="form.jenis_transaksi" class="input text-gray-500 focus:text-gray-700">
+             <option selected>--Select</option>
+             <option value="pemasukan">Pemasukan</option>
+             <option value="pengeluaran">Pengeluaran</option>
          </select>
          <div class="flex">
             <span class="block mr-2 text-xl" >Rp</span>
-            <input class="input" type="number" placeholder="Nominal transaksi"/>
+            <input :class="form.nominal_transaksi === 0 || form.nominal_transaksi == '' ? 'border-red-600' : ''" v-model="form.nominal_transaksi" class="input" type="number" placeholder="Nominal transaksi"/>
          </div>
-         <input class="input" @blur="textInput" @focus="dateInput" type="text" placeholder="Tanggal transaksi"/>
-         <button class="bg-blue-500 px-3 py-1 rounded font-semibold text-gray-50" type="button">Submit</button>
+         <input :class="form.tanggal_transaksi === '' ? 'border-red-600' : ''" v-model="form.tanggal_transaksi" class="input" @blur="textInput" @focus="dateInput" type="text" placeholder="Tanggal transaksi"/>
+         <button :class="isEmptyForm ? 'bg-blue-300' : 'bg-blue-600'" class="px-3 py-1 disabled:opacity-50 rounded font-semibold text-gray-50" type="button">Submit</button>
       </div>
    </div>
    
-   <div class="mt-5 mx-auto w-10/12 overflow-scroll">
+   <div class="mt-5 mx-auto w-full overflow-scroll">
       <h1>2. All transactions</h1>
       <table class="rounded-t-lg m-5 w-5/6 mx-auto bg-gray-200 text-gray-800">
         <tr class="text-left border-b-2 border-gray-300">
@@ -25,42 +28,29 @@
           <th class="px-4 py-3">Nama item</th>
           <th class="px-4 py-3">Nominal</th>
           <th class="px-4 py-3">Tanggal</th>
+          <th class="px-4 py-3">Jenis</th>
           <th class="px-4 py-3">Actions</th>
         </tr>
         
-        <tr v-if="dataKasir" v-for="data in dataKasir.results" :key="data.id_transaksi">
+        <tr class="border-b-2 border-gray-300" v-if="dataKasir" v-for="data in dataKasir.results" :key="data.id_transaksi">
            <td class="px-4 py-3">{{ data.id_transaksi }}</td>
            <td class="px-4 py-3">{{ data.nama_item }}</td>
            <td class="px-4 py-3">{{ data.nominal_transaksi }}</td>
            <td class="px-4 py-3">{{ new Date(data.tanggal_transaksi).toLocaleString() }}</td>
+           <td class="px-4 py-3">{{ data.jenis_transaksi }}</td>
            <td class="px-4 py-3">
              <button class="bg-green-300 mb-1 mr-1 px-2 rounded" type="button">Edit</button>
              <button class="bg-red-400 px-2 rounded" type="button">Delete</button>
            </td>
         </tr>
-        
-        <!-- <template v-for="data in dataKasir.results" :key="data.id_transaksi">
-           <tr class="bg-gray-100 border-b border-gray-200">
-             <td class="px-4 py-3">{{ data.id_transaksi }}</td>
-             <td class="px-4 py-3">{{ data.nama_item }}</td>
-             <td class="px-4 py-3">{{ data.nama_item }}</td>
-             <td class="px-4 py-3">{{ new Date(data.tanggal_transaksi).toLocaleString() }}</td>
-             <td class="px-4 py-3">
-                <button class="bg-green-300 mb-1 mr-1 px-2 rounded" type="button">Edit</button>
-                <button class="bg-red-400 px-2 rounded" type="button">Delete</button>
-             </td>
-           </tr>
-        </template> -->
-        
    </table>
-
    </div>
 </template>
 
 <script setup >
    
    import  axios from 'axios'
-   import { shallowRef, ref, onMounted } from 'vue'
+   import { reactive, ref, watch, onMounted } from 'vue'
    
    let dataKasir = ref()
    const getDataKasir = () => {
@@ -68,10 +58,24 @@
          .then( res => dataKasir.value = res.data)
          .catch( err => alert(err))
    }
-   
    onMounted(getDataKasir)
-
    
+   const dateInput = e => e.target.setAttribute('type', 'date')
+   const textInput = e => e.target.setAttribute('type', 'text')
+   
+   //Object for store form
+   const form = reactive({
+      nama_item: '',
+      jenis_transaksi: '',
+      tanggal_transaksi: '',
+      nominal_transaksi: 0
+   })
+   
+   const isEmptyForm = ref(true)
+   watch(form, () => {
+      if ( Object.values(form).filter( val => val === '' || val === 0).length > 0 ) isEmptyForm.value = true
+      else isEmptyForm.value = false
+   })
 </script>
 
 <style>
