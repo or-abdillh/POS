@@ -1,6 +1,6 @@
 <template>
    <pre>
-      {{ form }}
+      {{ form.nominal_transaksi }}
    </pre>
    <div class="mt-5 mb-5 mx-auto w-10/12">
       <h1>1. Create new transactions</h1>
@@ -16,7 +16,8 @@
             <input :class="form.nominal_transaksi === 0 || form.nominal_transaksi == '' ? 'border-red-600' : ''" v-model="form.nominal_transaksi" class="input" type="number" placeholder="Nominal transaksi"/>
          </div>
          <input :class="form.tanggal_transaksi === '' ? 'border-red-600' : ''" v-model="form.tanggal_transaksi" class="input" @blur="textInput" @focus="dateInput" type="text" placeholder="Tanggal transaksi"/>
-         <button :class="isEmptyForm ? 'bg-blue-300' : 'bg-blue-600'" class="px-3 py-1 disabled:opacity-50 rounded font-semibold text-gray-50" type="button">Submit</button>
+         <small v-if="isEmptyForm" class="block font-semibold mb-2 text-red-500" >! Empty input detected</small>
+         <button @click="postDataKasir" :class="isEmptyForm ? 'bg-blue-300' : 'bg-blue-600'" class="px-3 py-1 disabled:opacity-50 rounded font-semibold text-gray-50" type="button">Submit</button>
       </div>
    </div>
    
@@ -52,6 +53,7 @@
    import  axios from 'axios'
    import { reactive, ref, watch, onMounted } from 'vue'
    
+   //Get data from table
    let dataKasir = ref()
    const getDataKasir = () => {
       axios.get('http://localhost:8080/kasir/all')
@@ -60,6 +62,7 @@
    }
    onMounted(getDataKasir)
    
+   //INput tanggal_transaksi event
    const dateInput = e => e.target.setAttribute('type', 'date')
    const textInput = e => e.target.setAttribute('type', 'text')
    
@@ -68,20 +71,28 @@
       nama_item: '',
       jenis_transaksi: '',
       tanggal_transaksi: '',
-      nominal_transaksi: 0
+      nominal_transaksi: ''
    })
    
+   //Validation system
    const isEmptyForm = ref(true)
    watch(form, () => {
       if ( Object.values(form).filter( val => val === '' || val === 0).length > 0 ) isEmptyForm.value = true
       else isEmptyForm.value = false
    })
+   
+   //Post data
+   const postDataKasir = () => {
+      axios.post('http://localhost:8080/kasir/new', form)
+         .then( res => {
+            if ( res.data.code === 200 ) getDataKasir()   
+         })
+         .catch( err => console.log(err))
+   }
 </script>
 
 <style>
-   
    .input {
-      @apply bg-gray-200 px-3 py-2 w-full rounded mb-3 border-2 border-gray-400;
+      @apply bg-gray-200 px-3 py-2 w-full rounded mb-3 border border-gray-400;
    }
-   
 </style>

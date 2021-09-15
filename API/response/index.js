@@ -9,7 +9,11 @@ const setData = (code, message, values) => {
 } 
 
 const setResponse = (data, res) => {
-   res.header('Access-Control-Allow-Origin', '*')
+   res.set({
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+      "Control-Allow-Methods": "PUT, GET, POST, DELETE, OPTION"
+      })
    res.json(data);
    res.end();
 }
