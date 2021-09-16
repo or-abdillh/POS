@@ -4,7 +4,7 @@
          <h1 class="text-center font-semibold" >Update</h1>
          <input v-model="formKasirById.nama_item" type="text" placeholder="Nama item" class="input bg-gray-300 mt-3" />
          <select v-model="formKasirById.jenis_transaksi" class="input bg-gray-300">
-            <option selected="">--Select</option>
+            <option disabled="true">--Jenis transaksi</option>
             <option value="pemasukan">Pemasukan</option>
             <option value="pengeluaran">Pengeluaran</option>
          </select>
@@ -48,7 +48,7 @@
       id_transaksi: '',
       nama_item: "",
       nominal_transaksi: 0,
-      jenis_transaksi: ""
+      jenis_transaksi: "--Jenis transaksi"
    })
    
    // If form data sending to props

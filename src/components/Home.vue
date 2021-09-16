@@ -4,7 +4,7 @@
       <div class="mt-3">
          <input :class="form.nama_item === '' ? 'border-red-600' : ''" v-model="form.nama_item" class="input" type="text" placeholder="Nama item"/>
          <select :class="form.jenis_transaksi === '' ? 'border-red-600' : ''" v-model="form.jenis_transaksi" class="input text-gray-500 focus:text-gray-700">
-             <option selected>--Select</option>
+             <option disabled="true">--Jenis transaksi</option>
              <option value="pemasukan">Pemasukan</option>
              <option value="pengeluaran">Pengeluaran</option>
          </select>
@@ -86,7 +86,7 @@
    //Object for store form
    const form = reactive({
       nama_item: '',
-      jenis_transaksi: '',
+      jenis_transaksi: '--Jenis transaksi',
       tanggal_transaksi: '',
       nominal_transaksi: ''
    })
