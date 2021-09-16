@@ -20,7 +20,7 @@
    
    <div class="mt-5 mx-auto w-10/12 overflow-scroll">
       <h1>2. All transactions</h1>
-      <span class="badge">Banyak records : {{ dataKasir.results.length }}</span>
+      <span v-if="dataKasir" class="badge">Banyak records : {{ dataKasir.results.length }}</span>
       <table class="rounded-t-lg m-5 w-5/6 mx-auto bg-gray-200 text-gray-800">
         <tr class="text-left border-b-2 border-gray-300">
           <th class="px-4 py-3">ID</th>
@@ -39,7 +39,7 @@
            <td class="px-4 py-3">{{ data.jenis_transaksi }}</td>
            <td class="px-4 py-3">
              <button class="bg-green-300 mb-1 mr-1 px-2 rounded" type="button">Edit</button>
-             <button class="bg-red-400 px-2 rounded" type="button">Delete</button>
+             <button @click="deleteDataKasir(data.id_transaksi, getDataKasir)" class="bg-red-400 px-2 rounded" type="button">Delete</button>
            </td>
         </tr>
    </table>
@@ -50,6 +50,7 @@
    
    import  axios from 'axios'
    import { reactive, ref, watch, onMounted } from 'vue'
+   import deleteDataKasir from '../components/delete.js'
    
    //Get data from table
    let dataKasir = ref()
