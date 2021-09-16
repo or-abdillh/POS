@@ -44,7 +44,7 @@
         </tr>
       </table>
    </div>
-   <EditKasir v-on:close_modal="isShowModalEdit = !isShowModalEdit" v-on:update-success="getDataKasir()" :isShow="isShowModalEdit" :form="dataKasirById"></EditKasir>
+   <EditKasir v-on:close_modal="isShowModalEdit = !isShowModalEdit" v-on:update_success="getDataKasir" :isShow="isShowModalEdit" :form="dataKasirById"></EditKasir>
 </template>
 
 <script setup >
