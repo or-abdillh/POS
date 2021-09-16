@@ -1,7 +1,4 @@
 <template>
-   <pre>
-      {{ form.nominal_transaksi }}
-   </pre>
    <div class="mt-5 mb-5 mx-auto w-10/12">
       <h1>1. Create new transactions</h1>
       <div class="mt-3">
@@ -17,12 +14,13 @@
          </div>
          <input :class="form.tanggal_transaksi === '' ? 'border-red-600' : ''" v-model="form.tanggal_transaksi" class="input" @blur="textInput" @focus="dateInput" type="text" placeholder="Tanggal transaksi"/>
          <small v-if="isEmptyForm" class="block font-semibold mb-2 text-red-500" >! Empty input detected</small>
-         <button @click="postDataKasir" :class="isEmptyForm ? 'bg-blue-300' : 'bg-blue-600'" class="px-3 py-1 disabled:opacity-50 rounded font-semibold text-gray-50" type="button">Submit</button>
+         <button ref="btnSubmit" @click="postDataKasir" :class="isEmptyForm ? 'bg-blue-300' : 'bg-blue-600'" class="px-3 py-1 disabled:opacity-50 rounded font-semibold text-gray-50" type="button">Submit</button>
       </div>
    </div>
    
-   <div class="mt-5 mx-auto w-full overflow-scroll">
+   <div class="mt-5 mx-auto w-10/12 overflow-scroll">
       <h1>2. All transactions</h1>
+      <span class="badge">Banyak records : {{ dataKasir.results.length }}</span>
       <table class="rounded-t-lg m-5 w-5/6 mx-auto bg-gray-200 text-gray-800">
         <tr class="text-left border-b-2 border-gray-300">
           <th class="px-4 py-3">ID</th>
@@ -82,16 +80,27 @@
    })
    
    //Post data
+   const btnSubmit = ref(null)
    const postDataKasir = () => {
+      btnSubmit.value.innerHTML = 'Loading ..'
       axios.post('http://localhost:8080/kasir/new', form)
          .then( res => {
-            if ( res.data.code === 200 ) getDataKasir()   
+            if ( res.data.code === 200 ) {
+               getDataKasir() // refresh table
+               setTimeout(() => {
+                  btnSubmit.value.innerHTML = 'Submit'
+                  // Delete all form
+                  Object.keys(form).forEach( key => form[key] = "") 
+               }, 500)
+            }   
          })
          .catch( err => console.log(err))
    }
 </script>
-
 <style>
+   .badge {
+      @apply inline-block px-3 py-2 bg-green-500 rounded-md text-gray-50 mt-3; 
+   }
    .input {
       @apply bg-gray-200 px-3 py-2 w-full rounded mb-3 border border-gray-400;
    }
