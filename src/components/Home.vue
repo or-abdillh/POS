@@ -39,21 +39,19 @@
            <td class="px-4 py-3">{{ data.jenis_transaksi }}</td>
            <td class="px-4 py-3">
              <button @click="updateDataKasir(data.id_transaksi)" class="bg-green-300 mb-1 mr-1 px-2 rounded" type="button">Edit</button>
-             <button @click="deleteDataKasir(data.id_transaksi, getDataKasir)" class="bg-red-400 px-2 rounded" type="button">Delete</button>
+             <button @click="deleteData.kasir(data.id_transaksi, getDataKasir)" class="bg-red-400 px-2 rounded" type="button">Delete</button>
            </td>
         </tr>
       </table>
    </div>
-   <EditKasir v-on:close_modal="isShowModalEdit = !isShowModalEdit" :isShow="isShowModalEdit" :id-transaksi="updateById">
-      
-   </EditKasir>
+   <EditKasir v-on:close_modal="isShowModalEdit = !isShowModalEdit" v-on:update-success="getDataKasir()" :isShow="isShowModalEdit" :form="dataKasirById"></EditKasir>
 </template>
 
 <script setup >
    
    import  axios from 'axios'
    import { reactive, ref, watch, onMounted } from 'vue'
-   import deleteDataKasir from '../components/delete.js'
+   import deleteData from '../components/delete.js'
    import EditKasir from '../components/modal/EditKasir.vue'
    
    //Get data from table
@@ -63,14 +61,22 @@
          .then( res => dataKasir.value = res.data)
          .catch( err => alert(err))
    }
+   // Get data at page loadi
    onMounted(getDataKasir)
    
    // Edit data kasir
-   const isShowModalEdit = ref(true)
+   const isShowModalEdit = ref(false)
    const updateById = ref(null)
    const updateDataKasir = id => {
       isShowModalEdit.value = !isShowModalEdit.value
       updateById.value = id
+      dataKasirById.value = getDataKasirById(id)
+   }
+   
+   // Get dat by id_transaksi
+   const dataKasirById = ref(null)
+   const getDataKasirById = id => {
+      return dataKasir.value.results.filter( data => data.id_transaksi === id)
    }
    
    //Input tanggal_transaksi event
