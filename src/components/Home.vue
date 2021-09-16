@@ -38,12 +38,15 @@
            <td class="px-4 py-3">{{ new Date(data.tanggal_transaksi).toLocaleString() }}</td>
            <td class="px-4 py-3">{{ data.jenis_transaksi }}</td>
            <td class="px-4 py-3">
-             <button class="bg-green-300 mb-1 mr-1 px-2 rounded" type="button">Edit</button>
+             <button @click="updateDataKasir(data.id_transaksi)" class="bg-green-300 mb-1 mr-1 px-2 rounded" type="button">Edit</button>
              <button @click="deleteDataKasir(data.id_transaksi, getDataKasir)" class="bg-red-400 px-2 rounded" type="button">Delete</button>
            </td>
         </tr>
-   </table>
+      </table>
    </div>
+   <EditKasir v-on:close_modal="isShowModalEdit = !isShowModalEdit" :isShow="isShowModalEdit" :id-transaksi="updateById">
+      
+   </EditKasir>
 </template>
 
 <script setup >
@@ -51,6 +54,7 @@
    import  axios from 'axios'
    import { reactive, ref, watch, onMounted } from 'vue'
    import deleteDataKasir from '../components/delete.js'
+   import EditKasir from '../components/modal/EditKasir.vue'
    
    //Get data from table
    let dataKasir = ref()
@@ -61,7 +65,15 @@
    }
    onMounted(getDataKasir)
    
-   //INput tanggal_transaksi event
+   // Edit data kasir
+   const isShowModalEdit = ref(true)
+   const updateById = ref(null)
+   const updateDataKasir = id => {
+      isShowModalEdit.value = !isShowModalEdit.value
+      updateById.value = id
+   }
+   
+   //Input tanggal_transaksi event
    const dateInput = e => e.target.setAttribute('type', 'date')
    const textInput = e => e.target.setAttribute('type', 'text')
    
